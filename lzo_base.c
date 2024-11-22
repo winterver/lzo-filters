@@ -16,11 +16,11 @@ int main(int argc, char **argv)
 
     if (argc != 1) {
 #if COMPRESSOR
-        dprintf(2, "usage: cat file | " ALGO_NAME " > file." ALGO_NAME "\n");
+        dprintf(2, "usage: cat file | " PROG_NAME " > file." PROG_NAME "\n");
         dprintf(2, "I take no argument. Please feed me data through stdin.\n");
         dprintf(2, "Then I will emit compressed data to stdout.\n");
 #else
-        dprintf(2, "usage: cat file." ALGO_NAME " | " ALGO_NAME "d > file\n");
+        dprintf(2, "usage: cat file." PROG_NAME " | " PROG_NAME "d > file\n");
         dprintf(2, "I take no argument. Please feed me data through stdin.\n");
         dprintf(2, "Then I will emit decompressed data to stdout.\n");
 #endif

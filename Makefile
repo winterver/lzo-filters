@@ -10,4 +10,4 @@ all: $(TARGETS)
 	$(CC) $< -o $@d $(CFLAGS) -DCOMPRESSOR=0
 
 clean:
-	rm -rf $(foreach t,$(TARGETS),$(t) $(t)d) > /dev/null
+	@rm -rf $(foreach t,$(TARGETS),$(t) $(t)d) > /dev/null
