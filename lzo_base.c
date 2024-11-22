@@ -7,7 +7,7 @@ int main(int argc, char **argv)
 {
     lzo_byte inbuf[8192];
     lzo_byte outbuf[MAX_OUT_LEN(sizeof(inbuf))];
-    lzo_byte wrkmem[WRKMEM_SIZE];
+    lzo_byte workmem[WORKMEM_SIZE];
     lzo_uint inlen, outlen;
 
 #ifndef COMPRESSOR
@@ -20,7 +20,7 @@ int main(int argc, char **argv)
         dprintf(2, "I take no argument. Please feed me data through stdin.\n");
         dprintf(2, "Then I will emit compressed data to stdout.\n");
 #else
-        dprintf(2, "usage: cat file." PROG_NAME " | " PROG_NAME "d > file\n");
+        dprintf(2, "usage: cat file." PROG_NAME " | un" PROG_NAME " > file\n");
         dprintf(2, "I take no argument. Please feed me data through stdin.\n");
         dprintf(2, "Then I will emit decompressed data to stdout.\n");
 #endif
@@ -32,7 +32,7 @@ int main(int argc, char **argv)
     int ret;
 #if COMPRESSOR
     while ((inlen = read(0, inbuf, sizeof(inbuf))) > 0) {
-        ret = COMPRESS_FUNC(inbuf, inlen, outbuf, &outlen, wrkmem);
+        ret = COMPRESS_FUNC(inbuf, inlen, outbuf, &outlen, workmem);
         assert(ret == LZO_E_OK);
         ret = write(1, &outlen, sizeof(outlen));
         assert(ret == sizeof(outlen));
@@ -42,11 +42,9 @@ int main(int argc, char **argv)
     assert(inlen == 0);
 #else
     while ((ret = read(0, &outlen, sizeof(outlen))) > 0) {
-        int nr = 0;
-        while (nr != outlen) {
+        for (int nr = 0; nr != outlen; nr += ret) {
             ret = read(0, outbuf+nr, outlen-nr);
             assert(ret > 0);
-            nr += ret;
         }
         ret = DECOMPRESS_FUNC(outbuf, outlen, inbuf, &inlen, NULL);
         assert(ret == LZO_E_OK);

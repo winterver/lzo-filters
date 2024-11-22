@@ -7,7 +7,7 @@ all: $(TARGETS)
 
 %: %.c lzo_base.c
 	$(CC) $< -o $@ $(CFLAGS) -DCOMPRESSOR=1
-	$(CC) $< -o $@d $(CFLAGS) -DCOMPRESSOR=0
+	$(CC) $< -o un$@ $(CFLAGS) -DCOMPRESSOR=0
 
 clean:
-	@rm -rf $(foreach t,$(TARGETS),$(t) $(t)d) > /dev/null
+	@rm -rf $(foreach t,$(TARGETS),$(t) un$(t)) > /dev/null
