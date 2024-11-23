@@ -1,7 +1,7 @@
 CC = gcc
 CFLAGS = -O3 -llzo2
 
-TARGETS = lzo1x_1 lzo1x_999
+TARGETS = lzo1x_1 lzo1x_999 lzo1 lzo1_99 lzo1a lzo1a_99
 
 all: $(TARGETS)
 
