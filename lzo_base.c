@@ -40,6 +40,8 @@ int main(int argc, char **argv)
     lzo_byte workmem[WORKMEM_SIZE];
     lzo_uint inlen, outlen;
 
+    (void)argv;
+    (void)workmem;
 #ifndef COMPRESSOR
 # error "-DCOMPRESSOR=1 for compressor, 0 for decompressor"
 #endif
@@ -67,19 +69,19 @@ int main(int argc, char **argv)
         ret = write(1, &outlen, sizeof(outlen));
         assert(ret == sizeof(outlen));
         ret = write(1, outbuf, outlen);
-        assert(ret == outlen);
+        assert(ret == (int)outlen);
     }
     assert(inlen == 0);
 #else
     while ((ret = read(0, &outlen, sizeof(outlen))) > 0) {
-        for (int nr = 0; nr != outlen; nr += ret) {
+        for (lzo_uint nr = 0; nr != outlen; nr += ret) {
             ret = read(0, outbuf+nr, outlen-nr);
             assert(ret > 0);
         }
         ret = DECOMPRESS_FUNC(outbuf, outlen, inbuf, &inlen, NULL);
         assert(ret == LZO_E_OK);
         ret = write(1, inbuf, inlen);
-        assert(ret == inlen);
+        assert(ret == (int)inlen);
     }
     assert(ret == 0);
 #endif
